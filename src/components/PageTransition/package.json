@@ -1,0 +1,6 @@
+{
+  "name": "PageTransition",
+  "version": "0.0.0",
+  "private": true,
+  "main": "./PageTransition.js"
+}
