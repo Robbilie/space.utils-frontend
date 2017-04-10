@@ -5,16 +5,16 @@
 
   const title = 'Page Not Found';
 
-  export default {
+  export default [{
 
     path: '*',
 
-    action() {
+    action({ path }) {
       return {
         title,
-        component: <Layout><NotFound title={title} /></Layout>,
+        component: <Layout location={{ path }}><NotFound title={title} /></Layout>,
         status: 404,
       };
     },
 
-  };
+  }];

@@ -6,6 +6,7 @@
 
     constructor(props) {
       super(props);
+      console.log('alli props', props);
       this.state = {
         id: 0,
         name: '',
@@ -21,11 +22,11 @@
       return (
         <div className="page alliance-page two-col-page">
           <div className="left-col">
-            <img style={{ width: '256px' }} src={`https://imageserver.eveonline.com/Alliance/${this.state.id}_128.png`} />
+            <img style={{ width: '256px' }} src={`https://imageserver.eveonline.com/Alliance/${this.props.id}_128.png`} />
             <h2 className="mobile">
               <span>Alliance</span>
               <br />
-              <b>{this.state.name}</b>
+              <b>{this.props.name}</b>
             </h2>
             <div className="info-list">
               <div>
@@ -33,18 +34,18 @@
                 <div>
                   <span>Ticker</span>
                   <br />
-                  <b>{this.state.ticker}</b>
+                  <b>{this.props.ticker}</b>
                 </div>
               </div>
               <div>
                 <div>
-                  <img src={`https://imageserver.eveonline.com/Corporation/${this.state.executor_corporation.id}_32.png`} />
+                  <img src={`https://imageserver.eveonline.com/Corporation/${this.props.executor_corporation.id}_32.png`} />
                 </div>
                 <div>
                   <span>Executor</span>
                   <br />
                   <b>
-                    <Link to={`/corporations/${this.state.executor_corporation.id}/`}>{this.state.executor_corporation.name}</Link>
+                    <Link to={`/corporations/${this.props.executor_corporation.id}/`}>{this.props.executor_corporation.name}</Link>
                   </b>
                 </div>
               </div>
@@ -54,7 +55,7 @@
             <h2 className="desktop">
               <span>Alliance</span>
               <br />
-              <b>{this.state.name}</b>
+              <b>{this.props.name}</b>
             </h2>
           </div>
         </div>

@@ -7,13 +7,13 @@
 
     path: '/about/',
 
-    async action() {
+    async action({ path }) {
       const data = await require.ensure([], require => require('./about.md'), 'about');
 
       return {
         title: data.title,
         chunk: 'about',
-        component: <Layout><Page {...data} /></Layout>,
+        component: <Layout location={{ path }}><Page {...data} /></Layout>,
       };
     },
 

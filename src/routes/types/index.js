@@ -3,15 +3,15 @@
   import Layout from '../../components/Layout';
   import Type from './Type';
 
-  export default {
+  export default [{
 
     path: '/types/:id/',
 
-    async action() {
+    async action({ path }) {
       return {
         title: 'Type',
-        component: <Layout><Type /></Layout>,
+        component: <Layout location={{ path }}><Type /></Layout>,
       };
     },
 
-  };
+  }];

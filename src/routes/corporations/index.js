@@ -7,10 +7,10 @@
 
     path: '/corporations/:id/',
 
-    async action() {
+    async action({ path }) {
       return {
         title: 'Corporation',
-        component: <Layout><Corporation /></Layout>,
+        component: <Layout location={{ path }}><Corporation /></Layout>,
       };
     },
 

@@ -3,15 +3,15 @@
   import Layout from '../../components/Layout';
   import System from './System';
 
-  export default {
+  export default [{
 
     path: '/systems/:id/',
 
-    async action() {
+    async action({ path }) {
       return {
         title: 'System',
-        component: <Layout><System /></Layout>,
+        component: <Layout location={{ path }}><System /></Layout>,
       };
     },
 
-  };
+  }];

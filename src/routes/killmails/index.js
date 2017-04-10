@@ -8,10 +8,10 @@
 
     path: '/killmails/:id/',
 
-    async action() {
+    async action({ path }) {
       return {
         title: 'Killmail',
-        component: <Layout><Killmail /></Layout>,
+        component: <Layout location={{ path }}><Killmail /></Layout>,
       };
     },
 
@@ -19,10 +19,10 @@
 
     path: '/killmails/',
 
-    async action() {
+    async action({ path }) {
       return {
         title: 'Killmails',
-        component: <Layout><Killmails /></Layout>,
+        component: <Layout location={{ path }}><Killmails /></Layout>,
       };
     },
 

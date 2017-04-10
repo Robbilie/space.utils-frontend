@@ -1,12 +1,13 @@
 
 import React from 'react';
+import connector from '../../utils/connector';
 
 class Clock extends React.Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      time: this.dateToStr(new Date()),
+      time: this.dateToStr(new Date(this.props.runtime.initialNow)),
     };
   }
 
@@ -42,4 +43,4 @@ class Clock extends React.Component {
 
 }
 
-export default Clock;
+export default connector(Clock);

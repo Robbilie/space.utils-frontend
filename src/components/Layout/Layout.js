@@ -113,8 +113,7 @@
               awaitLoading={cb => this.awaitLoading(cb)}
             >
               {cloneElement(this.props.children, {
-                key: typeof (location) !== 'undefined' ? location.pathname : Math.random(),
-                setLoading: isLoading => this.setLoading(isLoading),
+                key: this.props.location.path,
               })}
             </PageTransition>
           </div>

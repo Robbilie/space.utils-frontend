@@ -9,6 +9,7 @@
     // Keep in mind, routes are evaluated in order
     children: [].concat(
       require('./home').default,
+      require('./search').default,
       require('./killmails').default,
       require('./characters').default,
       require('./corporations').default,
