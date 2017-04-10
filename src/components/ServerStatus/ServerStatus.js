@@ -5,45 +5,45 @@ import ESIClient from '../../utils/ESIClient';
 
 class ServerStatus extends React.Component {
 
-  constructor (props) {
+  constructor(props) {
     super(props);
     this.state = {
       status: true,
-      online: 0
+      online: 0,
     };
   }
 
-  componentDidMount () {
+  componentDidMount() {
     this.updateUserCounter();
   }
 
-  componentWillUnmount () {
+  componentWillUnmount() {
     clearTimeout(this.timeout);
   }
 
-  async updateUserCounter () {
-    let client = await ESIClient;
+  async updateUserCounter() {
+    const client = await ESIClient;
     try {
-      let { obj } = await client.Status.get_status();
+      const { obj } = await client.Status.get_status();
       this.setState({
         status: !obj.vip,
-        online: obj.players
+        online: obj.players,
       });
       this.timeout = setTimeout(() => this.updateUserCounter(), 1000 * 60 * 5);
     } catch (e) {
       this.setState({
         status: false,
-        online: 0
+        online: 0,
       });
       this.timeout = setTimeout(() => this.updateUserCounter(), 1000 * 60 * 2);
     }
   }
 
-  render () {
+  render() {
     return (
-      <div className={`usercount ${this.state.status ? "online" : "offline"}`}>
+      <div className={`usercount ${this.state.status ? 'online' : 'offline'}`}>
         <span>TQ</span>
-        {" "}
+        {' '}
         {this.state.online.toLocaleString()}
       </div>
     );

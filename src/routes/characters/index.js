@@ -1,16 +1,16 @@
 
   import React from 'react';
   import Layout from '../../components/Layout';
-  import Home from './Home';
+  import Character from './Character';
 
   export default [{
 
-    path: '/',
+    path: '/characters/:id/',
 
     async action() {
       return {
-        title: 'Home',
-        component: <Layout><Home /></Layout>,
+        title: 'Character',
+        component: <Layout><Character /></Layout>,
       };
     },
 

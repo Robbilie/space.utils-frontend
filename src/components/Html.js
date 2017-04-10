@@ -57,6 +57,22 @@ class Html extends React.Component {
           )}
         </head>
         <body>
+          <svg width="0" height="0" viewBox="0 0 1 1">
+            <defs>
+              <clipPath id="pone" clipPathUnits="objectBoundingBox">
+                <polygon points="0 0, 1 0, 0.75 1, 0 1" />
+              </clipPath>
+              <clipPath id="ptwo" clipPathUnits="objectBoundingBox">
+                <polygon points="0.2 0, 1 0, 0.8 1, 0 1" />
+              </clipPath>
+              <clipPath id="pthree" clipPathUnits="objectBoundingBox">
+                <polygon points="0.25 0, 1 0, 1 1, 0 1" />
+              </clipPath>
+              <clipPath id="pfull" clipPathUnits="objectBoundingBox">
+                <polygon points="0 0, 1 0, 1 1, 0 1" />
+              </clipPath>
+            </defs>
+          </svg>
           <div
             id="app"
             // eslint-disable-next-line react/no-danger

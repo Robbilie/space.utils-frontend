@@ -3,7 +3,7 @@ import React from 'react';
 
 class Loading extends React.Component {
 
-  render () {
+  render() {
     return (
       <div className="loader">
         <div className="loader-circle" />
