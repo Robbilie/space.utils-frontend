@@ -15,7 +15,7 @@
       let { obj: data } = await client.alliances.AllianceHandler_get_by_id({ alliance_id: parseInt(id) });
       store.dispatch(set_loading(false));
       return {
-        title: 'Alliance',
+        title: `Alliance - ${data.name}`,
         component: <Layout location={{ path }}><Alliance data={data} /></Layout>,
       };
     },

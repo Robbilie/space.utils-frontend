@@ -4,57 +4,59 @@
 
   class Corporation extends React.Component {
 
-    constructor(props) {
-      super(props);
-      this.state = {
-        id: 0,
-        name: '',
-        ticker: '',
-        executor_corporation: {
-          id: 0,
-          name: '',
-        },
-      };
-    }
-
     render() {
       return (
-        <div className="page alliance-page two-col-page">
+        <div className="page corporation-page two-col-page">
           <div className="left-col">
-            <img style={{ width: '256px' }} src={`https://imageserver.eveonline.com/Alliance/${this.state.id}_128.png`} />
+            <img src={`https://imageserver.eveonline.com/Corporation/${this.props.data.id}_256.png`} />
             <h2 className="mobile">
-              <span>Alliance</span>
-              <br />
-              <b>{this.state.name}</b>
+              <span>Corporation</span>
+              <br	/>
+              <b>{this.props.data.name}</b>
             </h2>
             <div className="info-list">
               <div>
                 <div />
                 <div>
                   <span>Ticker</span>
-                  <br />
-                  <b>{this.state.ticker}</b>
+                  <br	/>
+                  <b>{this.props.data.ticker}</b>
                 </div>
               </div>
               <div>
                 <div>
-                  <img src={`https://imageserver.eveonline.com/Corporation/${this.state.executor_corporation.id}_32.png`} />
+                  <img src={`https://imageserver.eveonline.com/Character/${this.props.data.ceo.id}_32.jpg`} />
                 </div>
                 <div>
-                  <span>Executor</span>
-                  <br />
+                  <span>CEO</span>
+                  <br	/>
                   <b>
-                    <Link to={`/corporations/${this.state.executor_corporation.id}/`}>{this.state.executor_corporation.name}</Link>
+                    <Link to={`/characters/${this.props.data.ceo.id}/`}>{this.props.data.ceo.name}</Link>
                   </b>
                 </div>
               </div>
+              {this.props.data.alliance ?
+                <div>
+                  <div>
+                    <img src={`https://imageserver.eveonline.com/Alliance/${this.props.data.alliance.id}_32.png`} />
+                  </div>
+                  <div>
+                    <span>Alliance</span>
+                    <br	/>
+                    <b>
+                      <Link to={`/alliances/${this.props.data.alliance.id}/`}>{this.props.data.alliance.name}</Link>
+                    </b>
+                  </div>
+                </div> :
+                null
+              }
             </div>
           </div>
           <div className="right-col">
             <h2 className="desktop">
-              <span>Alliance</span>
-              <br />
-              <b>{this.state.name}</b>
+              <span>Corporation</span>
+              <br	/>
+              <b>{this.props.data.name}</b>
             </h2>
           </div>
         </div>

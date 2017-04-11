@@ -4,11 +4,6 @@
 
   class Alliance extends React.Component {
 
-    constructor(props) {
-      super(props);
-      console.log('alli props', props);
-    }
-
     render() {
       return (
         <div className="page alliance-page two-col-page">
