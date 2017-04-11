@@ -24,7 +24,6 @@
       super(props);
       console.log('sb', props);
       this.state = {
-        query: this.props.search,
         results: this.props.search ? [] : [['Start typing…', []]],
       };
 
@@ -40,15 +39,11 @@
       }
     }
 
-    handleChange(e) {
-      console.log('change');
-      this.setState({ query: e.target.value });
-    }
-
     search(search, init) {
       console.log(search, init);
-      if (!init) { this.setState({ query: search }); }
+      if (!init) { /*this.setState({ query: search });*/ }
       if (search.length < 3) { return this.setState({ results: [['Start typing…', []]] }); }
+      console.log("searching for", search);
       this.debounce_request_search(search, init);
     }
 
@@ -63,7 +58,7 @@
       const { obj } = await client.apis.Universe.post_universe_names({ ids: [].concat(...Object.values(search_data).map(val => val.slice(0, this.props.limit))) });
       const lookup = obj.reduce((p, { id, name }) => !(p[id] = name) || p, {});
       const results = Object.entries(search_data).map(([name, ids]) => ([name, ids.slice(0, this.props.limit).map(id => ({ id, name: lookup[id] }))]));
-      if (this.state.query == search) {
+      if (this.props.layout.search == search) {
         console.log(results);
         this.setState({ results });
       }
@@ -83,11 +78,9 @@
                 [
                   <h3	key={result[0]}>{result[0]}</h3>,
                   result[1].map(({ id, name }) =>
-                    <Link route={result[0].split('_').slice(-1)[0]} params={{ id }} >
-                      <a onMouseUp={(e) => { console.log('oiiii'); this.props.set_searching(false); }}>
-                        <img src={this.resultToUrl(64, result[0], id)} />
-                        <span>{name}</span>
-                      </a>
+                    <Link key={id} to={`/${result[0].split("_").slice(-1)}s/${id}/`} onClick={e => { this.props.set_search(""); this.props.set_searching(false); } }>
+                      <img src={this.resultToUrl(64, result[0], id) } />
+                      <span>{name}</span>
                     </Link>,
                   ),
                 ])}
@@ -97,7 +90,7 @@
             <input
               type="text"
               value={this.props.layout.search}
-              onChange={e => this.handleChange(e)}
+              onChange={e => console.log('onchange') || this.props.set_search(e.target.value)}
               onKeyUp={e => console.log('onkeyup') || !this.props.set_searching(!!e.target.value) || this.search(e.target.value)}
               onFocus={e => console.log('onfocus') || !this.props.set_searching(!!e.target.value) || e.target.value == '' ? this.setState({ results: [['Start typing…', []]] }) : false}
             />
