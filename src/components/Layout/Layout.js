@@ -12,6 +12,7 @@
   import Loading from '../Loading';
 
   import { PageTransition, DummyTransitionComponent } from '../PageTransition';
+  import CSSTransitionGroup from 'react-addons-css-transition-group';
 
   class Layout extends React.Component {
 
@@ -103,19 +104,16 @@
           </div>
           <SideBar />
           <div className="content">
-            <PageTransition
-              component={DummyTransitionComponent}
+            <CSSTransitionGroup
               transitionName="example"
-              appear
               transitionAppearTimeout={500}
               transitionEnterTimeout={500}
               transitionLeaveTimeout={500}
-              awaitLoading={cb => this.awaitLoading(cb)}
             >
               {cloneElement(this.props.children, {
                 key: this.props.location.path,
               })}
-            </PageTransition>
+            </CSSTransitionGroup>
           </div>
           <div className="topbar">
             <SearchBar limit={20} categories={['alliance', 'character', 'corporation', 'inventorytype', 'solarsystem', 'faction']} />
