@@ -146,7 +146,7 @@ body {
   /* max-width: 1000px; */
 }
 
-.ui.searching .content .pages, #loadingState:checked ~ .content .pages .page:not(.intransition) {
+.ui.searching .content .pages, .ui.loading .content .pages .page:not(.intransition) {
   transform: translateZ(-200px);
   opacity: .6;
 }
@@ -182,7 +182,7 @@ body {
   vertical-align: middle;
 }
 
-#loadingState:not(:checked) ~ .loader {
+.ui.not-loading .loader {
   display: none;
 }
 
