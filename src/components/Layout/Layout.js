@@ -127,4 +127,4 @@
     }
   }
 
-  export default connector(withStyles(s)(Layout));
+  export default connector(/*withStyles(s)*/(Layout));
