@@ -1,5 +1,7 @@
 
   import React, { cloneElement } from 'react';
+  import CSSTransitionGroup from 'react-addons-css-transition-group';
+
   import withStyles from 'isomorphic-style-loader/lib/withStyles';
   import s from './Layout.css';
 
@@ -10,9 +12,6 @@
   import SearchBar from '../SearchBar';
   import Clock from '../Clock';
   import Loading from '../Loading';
-
-  import { PageTransition, DummyTransitionComponent } from '../PageTransition';
-  import CSSTransitionGroup from 'react-addons-css-transition-group';
 
   class Layout extends React.Component {
 
