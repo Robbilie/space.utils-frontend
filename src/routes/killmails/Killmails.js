@@ -4,58 +4,49 @@
 
   class Killmails extends React.Component {
 
-    constructor(props) {
-      super(props);
-      this.state = {
-        id: 0,
-        name: '',
-        ticker: '',
-        executor_corporation: {
-          id: 0,
-          name: '',
-        },
-      };
+    getTimeStr (d) {
+      return (d.getUTCHours() < 10 ? "0" : "") + d.getUTCHours() + ":" + (d.getUTCMinutes() < 10 ? "0" : "") + d.getUTCMinutes();
+    }
+
+    formatRow (killmail) {
+      let victim = killmail.victim;
+      let attacker = killmail.attackers.find(attacker => attacker.final_blow);
+      let time = new Date(killmail.time);
+      return (
+        <Link key={`killmail-${killmail.id}`} to={`/killmails/${killmail.id}/`} className="row">
+          <div className="column grad col-1">
+            <img src={`https://imageserver.eveonline.com/Type/${victim.ship_type.id}_64.png`} alt={victim.ship_type.name} />
+            <span className="vertmid">
+              <b>{this.getTimeStr(time)}</b>
+              <br />
+              {killmail.solar_system.name}
+            </span>
+          </div>
+          <div className="column grad col-2">
+            <img src={`https://imageserver.eveonline.com/${["alliance", "corporation", "character"].find(e => !!victim[e]).capitalizeFirstLetter()}/${[victim.alliance, victim.corporation, victim.character].find(e => !!e).id}_64.${["alliance", "corporation", "character"].find(e => !!victim[e]) == "character" ? "jpg" : "png"}`} alt={[victim.alliance, victim.corporation, victim.character].find(e => !!e).name} />
+            <span>
+              <b>{[victim.character, victim.corporation, victim.alliance, victim.faction].find(e => !!e).name}</b>
+              <br />
+              {[victim.corporation.name, victim.alliance ? victim.alliance.name : null].filter(e => !!e).join(" | ")}
+            </span>
+          </div>
+          <div className="column grad col-3 deso">
+            <img src={`https://imageserver.eveonline.com/${(["alliance", "corporation", "character"].find(e => !!attacker[e]) || "alliance").capitalizeFirstLetter()}/${[attacker.alliance, attacker.corporation, attacker.character, attacker.faction].find(e => !!e).id}_64.${["alliance", "corporation", "character"].find(e => !!attacker[e]) == "character" ? "jpg" : "png"}`} alt={[attacker.alliance, attacker.corporation, attacker.character, attacker.faction].find(e => !!e).name} />
+            <span>
+              <b>{[attacker.character, attacker.corporation, attacker.alliance, attacker.faction].find(e => !!e).name + (killmail.attackers.length > 1 ? " [+" + (killmail.attackers.length - 1) + "]" : "")}</b>
+              <br />
+              {[attacker.corporation ? attacker.corporation.name : null, attacker.alliance ? attacker.alliance.name : null, attacker.faction && !attacker.character ? attacker.faction.name : null].filter(e => !!e).join(" | ")}
+            </span>
+          </div>
+        </Link>
+      );
     }
 
     render() {
       return (
-        <div className="page alliance-page two-col-page">
-          <div className="left-col">
-            <img style={{ width: '256px' }} src={`https://imageserver.eveonline.com/Alliance/${this.state.id}_128.png`} />
-            <h2 className="mobile">
-              <span>Alliance</span>
-              <br />
-              <b>{this.state.name}</b>
-            </h2>
-            <div className="info-list">
-              <div>
-                <div />
-                <div>
-                  <span>Ticker</span>
-                  <br />
-                  <b>{this.state.ticker}</b>
-                </div>
-              </div>
-              <div>
-                <div>
-                  <img src={`https://imageserver.eveonline.com/Corporation/${this.state.executor_corporation.id}_32.png`} />
-                </div>
-                <div>
-                  <span>Executor</span>
-                  <br />
-                  <b>
-                    <Link to={`/corporations/${this.state.executor_corporation.id}/`}>{this.state.executor_corporation.name}</Link>
-                  </b>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="right-col">
-            <h2 className="desktop">
-              <span>Alliance</span>
-              <br />
-              <b>{this.state.name}</b>
-            </h2>
+        <div className="page killmails">
+          <div className="kill list">
+            {this.props.data.items.map(killmail => this.formatRow(killmail))}
           </div>
         </div>
       );

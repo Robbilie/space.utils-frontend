@@ -25,10 +25,19 @@
 
     path: '/killmails/',
 
-    async action({ path }) {
+    async action({ store, path }) {
+      store.dispatch(set_loading(true));
+      let client = await EASClient;
+      let { obj: data } = await client.killmails.KillmailHandler_filter({
+        body: {
+          filter: Object.assign({}, this.lowKillID ? { id: { $lt: this.id } } : {}),
+          options: { "sort": { "id": -1 }, "limit": 50 }
+        }
+      });
+      store.dispatch(set_loading(false));
       return {
         title: 'Killmails',
-        component: <Layout location={{ path }}><Killmails /></Layout>,
+        component: <Layout location={{ path }}><Killmails data={data} /></Layout>,
       };
     },
 

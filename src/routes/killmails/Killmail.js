@@ -8,7 +8,7 @@
     componentDidMount () {
       console.log("killmail mounted");
       if (typeof(window) !== "undefined") {
-        //setTimeout(() => this.initWebGl(), 500);
+        setTimeout(() => this.initWebGl(), 500);
       }
     }
 

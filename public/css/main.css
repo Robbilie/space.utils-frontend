@@ -66,6 +66,7 @@ body {
   position: relative;
   padding-top: 60px;
   width: 100%;
+  overflow-y: auto;
 }
 
 .pages {
@@ -82,6 +83,16 @@ body {
   left: 0;
   width: 100%;
   height: 80px;
+}
+
+.topbar::before {
+  content: "";
+  background: linear-gradient(rgba(0, 0, 0, 0.5),transparent);
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 120%;
 }
 
 .searchbar {
