@@ -47,6 +47,10 @@ class Html extends React.Component {
           <link rel="stylesheet" type="text/css" href="/css/bg.css" />
           <link rel="stylesheet" type="text/css" href="/css/main.css" />
           <script src="/js/particleground.js" />
+          <script type="text/javascript" src="/js/ccpwgl/glMatrix-0.9.5.min.js" />
+          <script type="text/javascript" src="/js/ccpwgl/ccpwgl_int.js" />
+          <script type="text/javascript" src="/js/ccpwgl/ccpwgl.js" />
+          <script type="text/javascript" src="/js/ccpwgl/TestCamera2.js" />
           {styles.map(style =>
             <style
               key={style.id}

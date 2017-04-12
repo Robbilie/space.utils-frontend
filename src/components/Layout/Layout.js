@@ -105,6 +105,8 @@
           <SideBar />
           <div className="content">
             <CSSTransitionGroup
+              component="div"
+              className="pages"
               transitionName="example"
               transitionAppearTimeout={500}
               transitionEnterTimeout={500}
