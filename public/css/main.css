@@ -663,6 +663,10 @@ body {
 
 /* Killboard Page */
 
+.page.killmails .kill.list {
+  padding-top: 10px;
+}
+
 .intransition .list > .row {
   margin-top: 200px;
 }
@@ -696,7 +700,7 @@ body {
 
 .list {
   overflow: auto;
-  height: 100%;
+  /*height: 100%;*/
 }
 
 .list > .row > .grad::after {

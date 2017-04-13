@@ -17,8 +17,8 @@
 
     constructor(props) {
       super(props);
-      console.log('new app');
-      console.log('app', this);
+      //console.log('new app');
+      //console.log('app', this);
       this.load_cbs = [];
       this.isLoading = false;
     }

@@ -4,6 +4,13 @@
 
   class Killmails extends React.Component {
 
+    constructor (props) {
+      super(props);
+      this.state = {
+        data: props.data
+      };
+    }
+
     getTimeStr (d) {
       return (d.getUTCHours() < 10 ? "0" : "") + d.getUTCHours() + ":" + (d.getUTCMinutes() < 10 ? "0" : "") + d.getUTCMinutes();
     }
@@ -46,7 +53,7 @@
       return (
         <div className="page killmails">
           <div className="kill list">
-            {this.props.data.items.map(killmail => this.formatRow(killmail))}
+            {this.state.data.items.map(killmail => this.formatRow(killmail))}
           </div>
         </div>
       );

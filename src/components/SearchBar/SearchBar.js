@@ -22,7 +22,6 @@
 
     constructor(props) {
       super(props);
-      console.log('sb', props);
       this.state = {
         results: this.props.search ? [] : [['Start typing…', []]],
       };
