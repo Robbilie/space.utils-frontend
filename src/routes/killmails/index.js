@@ -1,6 +1,5 @@
 
   import React from 'react';
-  import Layout from '../../components/Layout';
   import Killmail from './Killmail';
   import Killmails from './Killmails';
   import { set_loading } from '../../actions/layout';

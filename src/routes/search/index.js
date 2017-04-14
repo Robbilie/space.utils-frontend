@@ -1,6 +1,5 @@
 
   import React from 'react';
-  import Layout from '../../components/Layout';
   import Search from './Search';
   import { set_searching, set_search } from '../../actions/layout';
 

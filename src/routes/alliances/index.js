@@ -1,6 +1,5 @@
 
   import React from 'react';
-  import Layout from '../../components/Layout';
   import Alliance from './Alliance';
   import { set_loading } from '../../actions/layout';
   import EASClient from '../../utils/EASClient';
