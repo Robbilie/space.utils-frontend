@@ -9,14 +9,14 @@
 
     path: '/corporations/:id/',
 
-    async action({ store, path, params: { id } }) {
+    async action({ store, params: { id } }) {
       store.dispatch(set_loading(true));
       let client = await EASClient;
       let { obj: data } = await client.corporations.CorporationHandler_get_by_id({ corporation_id: parseInt(id) });
       store.dispatch(set_loading(false));
       return {
         title: `Corporation - ${data.name}`,
-        component: <Layout location={{ path }}><Corporation data={data} /></Layout>,
+        component: <Corporation data={data} />,
       };
     },
 

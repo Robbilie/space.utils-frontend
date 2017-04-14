@@ -1,6 +1,9 @@
 
   /* eslint-disable global-require */
 
+  import React from 'react';
+  import Layout from '../components/Layout';
+
   // The top-level (parent) route
   export default {
 
@@ -22,13 +25,15 @@
       require('./notFound').default,
     ),
 
-    async action({ next }) {
+    async action({ next, path }) {
       // Execute each child route until one of them return the result
       const route = await next();
 
       // Provide default values for title, description etc.
       route.title = `Space Utils - ${route.title || 'Untitled Page'}`;
       route.description = route.description || '';
+
+      route.component = <Layout location={{ path }}>{route.component}</Layout>;
 
       return route;
     },

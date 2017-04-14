@@ -7,10 +7,10 @@
 
     path: '/',
 
-    async action({ path }) {
+    async action() {
       return {
         title: 'Home',
-        component: <Layout location={{ path }}><Home /></Layout>,
+        component: <Home />,
       };
     },
 

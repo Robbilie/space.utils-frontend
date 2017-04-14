@@ -10,14 +10,14 @@
 
     path: '/killmails/:id/',
 
-    async action({ store, path, params: { id } }) {
+    async action({ store, params: { id } }) {
       store.dispatch(set_loading(true));
       let client = await EASClient;
       let { obj: data } = await client.killmails.KillmailHandler_get_by_id({ killmail_id: parseInt(id) });
       store.dispatch(set_loading(false));
       return {
         title: `Killmail - ${data.id}`,
-        component: <Layout location={{ path }}><Killmail data={data} /></Layout>,
+        component: <Killmail data={data} />,
       };
     },
 
@@ -25,7 +25,7 @@
 
     path: '/killmails/',
 
-    async action({ store, path }) {
+    async action({ store }) {
       store.dispatch(set_loading(true));
       let client = await EASClient;
       let { obj: data } = await client.killmails.KillmailHandler_filter({
@@ -37,7 +37,7 @@
       store.dispatch(set_loading(false));
       return {
         title: 'Killmails',
-        component: <Layout location={{ path }}><Killmails data={data} /></Layout>,
+        component: <Killmails data={data} />,
       };
     },
 

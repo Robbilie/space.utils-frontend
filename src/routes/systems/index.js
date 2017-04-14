@@ -7,10 +7,10 @@
 
     path: '/systems/:id/',
 
-    async action({ path }) {
+    async action() {
       return {
         title: 'System',
-        component: <Layout location={{ path }}><System /></Layout>,
+        component: <System />,
       };
     },
 

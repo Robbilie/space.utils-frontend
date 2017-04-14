@@ -7,10 +7,10 @@
 
     path: '/types/:id/',
 
-    async action({ path }) {
+    async action() {
       return {
         title: 'Type',
-        component: <Layout location={{ path }}><Type /></Layout>,
+        component: <Type />,
       };
     },
 

@@ -9,10 +9,10 @@
 
     path: '*',
 
-    action({ path }) {
+    action() {
       return {
         title,
-        component: <Layout location={{ path }}><NotFound title={title} /></Layout>,
+        component: <NotFound title={title} />,
         status: 404,
       };
     },
