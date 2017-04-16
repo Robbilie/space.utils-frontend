@@ -24,12 +24,13 @@
 
     path: '/killmails/',
 
-    async action({ store }) {
+    async action({ store, query }) {
+      console.log(query);
       store.dispatch(set_loading(true));
       let client = await EASClient;
       let { obj: data } = await client.killmails.KillmailHandler_filter({
         body: {
-          filter: Object.assign({}, this.lowKillID ? { id: { $lt: this.id } } : {}),
+          filter: Object.assign({}, query.max_id ? { id: { $lt: parseInt(query.max_id) } } : {}),
           options: { "sort": { "id": -1 }, "limit": 50 }
         }
       });

@@ -7,8 +7,10 @@
     constructor (props) {
       super(props);
       this.state = {
-        data: props.data
+        data: props.data,
+        low_id: Math.min(Number.MAX_VALUE, ...props.data.items.map(killmail => killmail.id))
       };
+      console.log("low", this.state.low_id);
     }
 
     getTimeStr (d) {
