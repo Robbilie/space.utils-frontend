@@ -25,7 +25,7 @@
       require('./notFound').default,
     ),
 
-    async action({ next, path }) {
+    async action({ next }) {
       // Execute each child route until one of them return the result
       const route = await next();
 
@@ -33,7 +33,7 @@
       route.title = `Space Utils - ${route.title || 'Untitled Page'}`;
       route.description = route.description || '';
 
-      route.component = <Layout location={{ path }}>{route.component}</Layout>;
+      route.component = <Layout location={route.location}>{route.component}</Layout>;
 
       return route;
     },

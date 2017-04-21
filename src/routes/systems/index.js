@@ -6,10 +6,11 @@
 
     path: '/systems/:id/',
 
-    async action() {
+    async action({ path }) {
       return {
         title: 'System',
         component: <System />,
+        location: { path },
       };
     },
 

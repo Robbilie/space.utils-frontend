@@ -8,7 +8,7 @@
 
     path: '/alliances/:id/',
 
-    async action({ store, params: { id } }) {
+    async action({ path, store, params: { id } }) {
       store.dispatch(set_loading(true));
       let client = await EASClient;
       let { obj: data } = await client.alliances.AllianceHandler_get_by_id({ alliance_id: parseInt(id) });
@@ -16,6 +16,7 @@
       return {
         title: `Alliance - ${data.name}`,
         component: <Alliance data={data} />,
+        location: { path },
       };
     },
 

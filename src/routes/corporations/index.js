@@ -8,7 +8,7 @@
 
     path: '/corporations/:id/',
 
-    async action({ store, params: { id } }) {
+    async action({ path, store, params: { id } }) {
       store.dispatch(set_loading(true));
       let client = await EASClient;
       let { obj: data } = await client.corporations.CorporationHandler_get_by_id({ corporation_id: parseInt(id) });
@@ -16,6 +16,7 @@
       return {
         title: `Corporation - ${data.name}`,
         component: <Corporation data={data} />,
+        location: { path },
       };
     },
 

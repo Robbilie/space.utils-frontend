@@ -6,12 +6,13 @@
 
     path: '/error',
 
-    action({ error }) {
+    action({ path, error }) {
       return {
         title: error.name,
         description: error.message,
         component: <ErrorPage error={error} />,
         status: error.status || 500,
+        location: { path },
       };
     },
 

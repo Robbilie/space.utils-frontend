@@ -6,10 +6,11 @@
 
     path: '/types/:id/',
 
-    async action() {
+    async action({ path }) {
       return {
         title: 'Type',
         component: <Type />,
+        location: { path },
       };
     },
 

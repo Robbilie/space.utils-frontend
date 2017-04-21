@@ -6,10 +6,11 @@
 
     path: '/',
 
-    async action() {
+    async action({ path }) {
       return {
         title: 'Home',
         component: <Home />,
+        location: { path },
       };
     },
 

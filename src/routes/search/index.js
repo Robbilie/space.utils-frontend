@@ -7,12 +7,13 @@
 
     path: '/search/:query/',
 
-    async action({ store, params: { query } }) {
+    async action({ path, store, params: { query } }) {
       store.dispatch(set_searching(true));
       store.dispatch(set_search(query));
       return {
         title: `Search - ${query}`,
         component: <Search query={query} />,
+        location: { path },
       };
     },
 
@@ -20,10 +21,11 @@
 
     path: '/search/',
 
-    async action() {
+    async action({ path }) {
       return {
         title: 'Search',
         component: <Search query="" />,
+        location: { path },
       };
     },
 
