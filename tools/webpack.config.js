@@ -13,6 +13,9 @@ import AssetsPlugin from 'assets-webpack-plugin';
 import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
 import pkg from '../package.json';
 
+import OfflinePlugin from 'offline-plugin';
+import WriteFilePlugin from 'write-file-webpack-plugin';
+
 const isDebug = !process.argv.includes('--release');
 const isVerbose = process.argv.includes('--verbose');
 const isAnalyze = process.argv.includes('--analyze') || process.argv.includes('--analyse');
@@ -169,6 +172,7 @@ const clientConfig = {
   },
 
   plugins: [
+
     // Define free variables
     // https://webpack.github.io/docs/list-of-plugins.html#defineplugin
     new webpack.DefinePlugin({
@@ -183,6 +187,32 @@ const clientConfig = {
       path: path.resolve(__dirname, '../build'),
       filename: 'assets.json',
       prettyPrint: true,
+    }),
+
+    new OfflinePlugin({
+      publicPath: '/assets/',
+      relativePaths: false,
+      ServiceWorker: {
+        output: 'sw.js',
+        events: true,
+        publicPath: '/sw.js',
+        navigateFallbackURL: '/',
+      },
+      AppCache: false,
+      externals: [
+        '/',
+        '/css/bg.css',
+        '/css/main.css',
+        '/js/particleground.js',
+        '/img/1x2.png',
+        '/img/killboard.jpg',
+        '/img/search.jpg',
+        '/img/service.jpg',
+      ],
+    }),
+
+    new WriteFilePlugin({
+      test: /sw\.js/,
     }),
 
     // Move modules that occur in multiple entry chunks to a new entry chunk (the commons chunk).

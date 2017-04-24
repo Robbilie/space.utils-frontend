@@ -6,7 +6,6 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
-
 import path from 'path';
 import express from 'express';
 import cookieParser from 'cookie-parser';
@@ -48,6 +47,8 @@ app.use(bodyParser.json());
 if (__DEV__) {
   app.enable('trust proxy');
 }
+
+app.get('/sw.js', (req, res) => res.sendFile(path.join(__dirname, 'public', 'assets', 'sw.js')));
 
 //
 // Register server-side rendering middleware
