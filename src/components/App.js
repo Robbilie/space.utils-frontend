@@ -7,19 +7,15 @@
  * LICENSE.txt file in the root directory of this source tree.
  */
 
-import React, { Children, PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 
 const ContextType = {
   // Enables critical path CSS rendering
   // https://github.com/kriasoft/isomorphic-style-loader
   insertCss: PropTypes.func.isRequired,
-  // Integrate Redux
-  // http://redux.js.org/docs/basics/UsageWithReact.html
-  store: PropTypes.shape({
-    subscribe: PropTypes.func.isRequired,
-    dispatch: PropTypes.func.isRequired,
-    getState: PropTypes.func.isRequired,
-  }).isRequired,
+  // Universal HTTP client
+  fetch: PropTypes.func.isRequired,
 };
 
 /**
@@ -60,7 +56,7 @@ class App extends React.PureComponent {
   render() {
     // NOTE: If you need to add or modify header, footer etc. of the app,
     // please do that inside the Layout component.
-    return Children.only(this.props.children);
+    return React.Children.only(this.props.children);
   }
 
 }

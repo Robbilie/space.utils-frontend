@@ -10,26 +10,15 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import FastClick from 'fastclick';
-import UniversalRouter from 'universal-router';
 import queryString from 'query-string';
 import { createPath } from 'history/PathUtils';
-import history from './core/history';
 import App from './components/App';
-import configureStore from './store/configureStore';
-import { updateMeta } from './core/DOMUtils';
-import { ErrorReporter, deepForceUpdate } from './core/devUtils';
+import createFetch from './createFetch';
+import history from './history';
+import { updateMeta } from './DOMUtils';
+import { ErrorReporter, deepForceUpdate } from './devUtils';
 
-import * as OfflinePluginRuntime from 'offline-plugin/runtime';
-OfflinePluginRuntime.install({
-  onUpdating: () => undefined,
-  // When an update is ready we will tell the new SW to take control immediately.
-  onUpdateReady: () => OfflinePluginRuntime.applyUpdate(),
-  // After the new SW update has been applied we will reload the users page
-  // to ensure they are using the latest assets.
-  // This only gets run if there were updates available for our cached assets.
-  onUpdated: () => window.location.reload(),
-  onUpdateFailed: () => undefined,
-});
+/* eslint-disable global-require */
 
 // Global (context) variables that can be easily accessed from any React component
 // https://facebook.github.io/react/docs/context.html
@@ -41,9 +30,10 @@ const context = {
     const removeCss = styles.map(x => x._insertCss());
     return () => { removeCss.forEach(f => f()); };
   },
-  // Initialize a new Redux store
-  // http://redux.js.org/docs/basics/UsageWithReact.html
-  store: configureStore(window.APP_STATE, { history }),
+  // Universal HTTP client
+  fetch: createFetch({
+    baseUrl: window.App.apiUrl,
+  }),
 };
 
 // Switch off the native scroll restoration behavior and handle it manually
@@ -102,7 +92,7 @@ FastClick.attach(document.body);
 const container = document.getElementById('app');
 let appInstance;
 let currentLocation = history.location;
-let routes = require('./routes').default;
+let router = require('./router').default;
 
 // Re-render the app when window.location changes
 async function onLocationChange(location, action) {
@@ -121,10 +111,10 @@ async function onLocationChange(location, action) {
     // Traverses the list of routes in the order they are defined until
     // it finds the first route that matches provided URL path string
     // and whose action method returns anything other than `undefined`.
-    const route = await UniversalRouter.resolve(routes, {
-      ...context,
+    const route = await router.resolve({
       path: location.pathname,
       query: queryString.parse(location.search),
+      fetch: context.fetch,
     });
 
     // Prevent multiple page renders during the routing process
@@ -151,7 +141,7 @@ async function onLocationChange(location, action) {
       throw error;
     }
 
-    console.error(error); // eslint-disable-line no-console
+    console.error(error);
 
     // Do a full page reload if error occurs during client-side navigation
     if (action && currentLocation.key === location.key) {
@@ -177,8 +167,8 @@ if (__DEV__) {
 
 // Enable Hot Module Replacement (HMR)
 if (module.hot) {
-  module.hot.accept('./routes', () => {
-    routes = require('./routes').default; // eslint-disable-line global-require
+  module.hot.accept('./router', () => {
+    router = require('./router').default;
 
     if (appInstance) {
       try {

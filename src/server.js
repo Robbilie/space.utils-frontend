@@ -6,6 +6,7 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
+
 import path from 'path';
 import express from 'express';
 import cookieParser from 'cookie-parser';
@@ -15,17 +16,18 @@ import expressGraphQL from 'express-graphql';
 import jwt from 'jsonwebtoken';
 import React from 'react';
 import ReactDOM from 'react-dom/server';
-import UniversalRouter from 'universal-router';
 import PrettyError from 'pretty-error';
 import App from './components/App';
 import Html from './components/Html';
 import { ErrorPageWithoutStyle } from './routes/error/ErrorPage';
 import errorPageStyle from './routes/error/ErrorPage.css';
-import routes from './routes';
+import createFetch from './createFetch';
+import passport from './passport';
+import router from './router';
+import models from './data/models';
+import schema from './data/schema';
 import assets from './assets.json'; // eslint-disable-line import/no-unresolved
-import configureStore from './store/configureStore';
-import { setRuntimeVariable } from './actions/runtime';
-import { port, auth } from './config';
+import config from './config';
 
 const app = express();
 
@@ -44,28 +46,47 @@ app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
+//
+// Authentication
+// -----------------------------------------------------------------------------
+app.use(expressJwt({
+  secret: config.auth.jwt.secret,
+  credentialsRequired: false,
+  getToken: req => req.cookies.id_token,
+}));
+app.use(passport.initialize());
+
 if (__DEV__) {
   app.enable('trust proxy');
 }
+app.get('/login/facebook',
+  passport.authenticate('facebook', { scope: ['email', 'user_location'], session: false }),
+);
+app.get('/login/facebook/return',
+  passport.authenticate('facebook', { failureRedirect: '/login', session: false }),
+  (req, res) => {
+    const expiresIn = 60 * 60 * 24 * 180; // 180 days
+    const token = jwt.sign(req.user, config.auth.jwt.secret, { expiresIn });
+    res.cookie('id_token', token, { maxAge: 1000 * expiresIn, httpOnly: true });
+    res.redirect('/');
+  },
+);
 
-app.get('/sw.js', (req, res) => res.sendFile(path.join(__dirname, 'public', 'assets', 'sw.js')));
+//
+// Register API middleware
+// -----------------------------------------------------------------------------
+app.use('/graphql', expressGraphQL(req => ({
+  schema,
+  graphiql: __DEV__,
+  rootValue: { request: req },
+  pretty: __DEV__,
+})));
 
 //
 // Register server-side rendering middleware
 // -----------------------------------------------------------------------------
 app.get('*', async (req, res, next) => {
   try {
-    const store = configureStore({
-      user: req.user || null,
-    }, {
-      cookie: req.headers.cookie,
-    });
-
-    store.dispatch(setRuntimeVariable({
-      name: 'initialNow',
-      value: Date.now(),
-    }));
-
     const css = new Set();
 
     // Global (context) variables that can be easily accessed from any React component
@@ -77,15 +98,17 @@ app.get('*', async (req, res, next) => {
         // eslint-disable-next-line no-underscore-dangle
         styles.forEach(style => css.add(style._getCss()));
       },
-      // Initialize a new Redux store
-      // http://redux.js.org/docs/basics/UsageWithReact.html
-      store,
+      // Universal HTTP client
+      fetch: createFetch({
+        baseUrl: config.api.serverUrl,
+        cookie: req.cookie,
+      }),
     };
 
-    const route = await UniversalRouter.resolve(routes, {
-      ...context,
+    const route = await router.resolve({
       path: req.path,
       query: req.query,
+      fetch: context.fetch,
     });
 
     if (route.redirect) {
@@ -102,10 +125,12 @@ app.get('*', async (req, res, next) => {
       assets.vendor.js,
       assets.client.js,
     ];
-    data.state = context.store.getState();
     if (assets[route.chunk]) {
       data.scripts.push(assets[route.chunk].js);
     }
+    data.app = {
+      apiUrl: config.api.clientUrl,
+    };
 
     const html = ReactDOM.renderToStaticMarkup(<Html {...data} />);
     res.status(route.status || 200);
@@ -123,7 +148,7 @@ pe.skipNodeFiles();
 pe.skipPackage('express');
 
 app.use((err, req, res, next) => { // eslint-disable-line no-unused-vars
-  console.log(pe.render(err)); // eslint-disable-line no-console
+  console.error(pe.render(err));
   const html = ReactDOM.renderToStaticMarkup(
     <Html
       title="Internal Server Error"
@@ -140,8 +165,8 @@ app.use((err, req, res, next) => { // eslint-disable-line no-unused-vars
 //
 // Launch the server
 // -----------------------------------------------------------------------------
-/* eslint-disable no-console */
-app.listen(port, () => {
-  console.log(`The server is running at http://localhost:${port}/`);
+models.sync().catch(err => console.error(err.stack)).then(() => {
+  app.listen(config.port, () => {
+    console.info(`The server is running at http://localhost:${config.port}/`);
+  });
 });
-/* eslint-enable no-console */
