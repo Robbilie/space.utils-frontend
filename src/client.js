@@ -12,11 +12,11 @@ import ReactDOM from 'react-dom';
 import FastClick from 'fastclick';
 import queryString from 'query-string';
 import { createPath } from 'history/PathUtils';
-import history from './core/history';
+import history from './history';
 import App from './components/App';
 import configureStore from './store/configureStore';
-import { updateMeta } from './core/DOMUtils';
-import { ErrorReporter, deepForceUpdate } from './core/devUtils';
+import { updateMeta } from './DOMUtils';
+import { ErrorReporter, deepForceUpdate } from './devUtils';
 
 import * as OfflinePluginRuntime from 'offline-plugin/runtime';
 OfflinePluginRuntime.install({
@@ -103,7 +103,7 @@ FastClick.attach(document.body);
 const container = document.getElementById('app');
 let appInstance;
 let currentLocation = history.location;
-let router = require('./core/router').default;
+let router = require('./router').default;
 
 // Re-render the app when window.location changes
 async function onLocationChange(location, action) {
@@ -178,8 +178,8 @@ if (__DEV__) {
 
 // Enable Hot Module Replacement (HMR)
 if (module.hot) {
-  module.hot.accept('./core/router', () => {
-    router = require('./core/router').default;
+  module.hot.accept('./router', () => {
+    router = require('./router').default;
 
     if (appInstance) {
       try {

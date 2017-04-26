@@ -29,7 +29,7 @@ import schema from './data/schema';
 import assets from './assets.json'; // eslint-disable-line import/no-unresolved
 import configureStore from './store/configureStore';
 import { setRuntimeVariable } from './actions/runtime';
-import { port, auth } from './config';
+import config from './config';
 
 const app = express();
 
@@ -84,18 +84,12 @@ app.get('*', async (req, res, next) => {
       // Initialize a new Redux store
       // http://redux.js.org/docs/basics/UsageWithReact.html
       store,
-      // Universal HTTP client
-      fetch: createFetch({
-        baseUrl: config.api.serverUrl,
-        cookie: req.cookie,
-      }),
     };
 
     const route = await router.resolve({
       ...context,
       path: req.path,
       query: req.query,
-      fetch: context.fetch,
     });
 
     if (route.redirect) {
@@ -155,8 +149,8 @@ app.use((err, req, res, next) => { // eslint-disable-line no-unused-vars
 // -----------------------------------------------------------------------------
 /* eslint-disable no-console */
 models.sync().catch(err => console.error(err.stack)).then(() => {
-  app.listen(port, () => {
-    console.log(`The server is running at http://localhost:${port}/`);
+  app.listen(config.port, () => {
+    console.log(`The server is running at http://localhost:${config.port}/`);
   });
 });
 /* eslint-enable no-console */

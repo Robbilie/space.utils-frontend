@@ -91,15 +91,15 @@ class Html extends React.Component {
             />
           )}
           {scripts.map(script => <script key={script} src={script} />)}
-          {analytics.google.trackingId &&
+          {analytics.googleTrackingId &&
             <script
               // eslint-disable-next-line react/no-danger
               dangerouslySetInnerHTML={{ __html:
               'window.ga=function(){ga.q.push(arguments)};ga.q=[];ga.l=+new Date;' +
-              `ga('create','${analytics.google.trackingId}','auto');ga('send','pageview')` }}
+              `ga('create','${analytics.googleTrackingId}','auto');ga('send','pageview')` }}
             />
           }
-          {analytics.google.trackingId &&
+          {analytics.googleTrackingId &&
             <script src="https://www.google-analytics.com/analytics.js" async defer />
           }
         </body>
