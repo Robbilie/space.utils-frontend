@@ -27,7 +27,9 @@ import router from './router';
 import models from './data/models';
 import schema from './data/schema';
 import assets from './assets.json'; // eslint-disable-line import/no-unresolved
-import config from './config';
+import configureStore from './store/configureStore';
+import { setRuntimeVariable } from './actions/runtime';
+import { port, auth } from './config';
 
 const app = express();
 
@@ -46,13 +48,58 @@ app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-app.get('/sw.js', (req, res) => res.sendFile(path.join(__dirname, 'public', 'assets', 'sw.js')));
+//
+// Authentication
+// -----------------------------------------------------------------------------
+app.use(expressJwt({
+  secret: auth.jwt.secret,
+  credentialsRequired: false,
+  getToken: req => req.cookies.id_token,
+}));
+app.use(passport.initialize());
+
+if (__DEV__) {
+  app.enable('trust proxy');
+}
+app.get('/login/facebook',
+  passport.authenticate('facebook', { scope: ['email', 'user_location'], session: false }),
+);
+app.get('/login/facebook/return',
+  passport.authenticate('facebook', { failureRedirect: '/login', session: false }),
+  (req, res) => {
+    const expiresIn = 60 * 60 * 24 * 180; // 180 days
+    const token = jwt.sign(req.user, auth.jwt.secret, { expiresIn });
+    res.cookie('id_token', token, { maxAge: 1000 * expiresIn, httpOnly: true });
+    res.redirect('/');
+  },
+);
+
+//
+// Register API middleware
+// -----------------------------------------------------------------------------
+app.use('/graphql', expressGraphQL(req => ({
+  schema,
+  graphiql: __DEV__,
+  rootValue: { request: req },
+  pretty: __DEV__,
+})));
 
 //
 // Register server-side rendering middleware
 // -----------------------------------------------------------------------------
 app.get('*', async (req, res, next) => {
   try {
+    const store = configureStore({
+      user: req.user || null,
+    }, {
+      cookie: req.headers.cookie,
+    });
+
+    store.dispatch(setRuntimeVariable({
+      name: 'initialNow',
+      value: Date.now(),
+    }));
+
     const css = new Set();
 
     // Global (context) variables that can be easily accessed from any React component
@@ -64,6 +111,9 @@ app.get('*', async (req, res, next) => {
         // eslint-disable-next-line no-underscore-dangle
         styles.forEach(style => css.add(style._getCss()));
       },
+      // Initialize a new Redux store
+      // http://redux.js.org/docs/basics/UsageWithReact.html
+      store,
       // Universal HTTP client
       fetch: createFetch({
         baseUrl: config.api.serverUrl,
@@ -72,6 +122,7 @@ app.get('*', async (req, res, next) => {
     };
 
     const route = await router.resolve({
+      ...context,
       path: req.path,
       query: req.query,
       fetch: context.fetch,
@@ -91,6 +142,7 @@ app.get('*', async (req, res, next) => {
       assets.vendor.js,
       assets.client.js,
     ];
+    data.state = context.store.getState();
     if (assets[route.chunk]) {
       data.scripts.push(assets[route.chunk].js);
     }
@@ -131,8 +183,10 @@ app.use((err, req, res, next) => { // eslint-disable-line no-unused-vars
 //
 // Launch the server
 // -----------------------------------------------------------------------------
+/* eslint-disable no-console */
 models.sync().catch(err => console.error(err.stack)).then(() => {
-  app.listen(config.port, () => {
-    console.info(`The server is running at http://localhost:${config.port}/`);
+  app.listen(port, () => {
+    console.log(`The server is running at http://localhost:${port}/`);
   });
 });
+/* eslint-enable no-console */
