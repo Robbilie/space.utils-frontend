@@ -17,7 +17,7 @@
 
     constructor(props) {
       super(props);
-      //console.log('new app');
+      console.log('new app');
       //console.log('app', this);
       this.load_cbs = [];
       this.isLoading = false;
@@ -30,41 +30,42 @@
     componentDidMount() {
       console.log('app did mount');
       if (typeof (window) !== 'undefined') {
-        this.background = window.particleground(document.getElementById('particles-background'), {
-          dotColor: 'rgba(255, 255, 255, 0.5)',
-          lineColor: 'rgba(255, 255, 255, 0.05)',
-          minSpeedX: 0.075,
-          maxSpeedX: 0.15,
-          minSpeedY: 0.075,
-          maxSpeedY: 0.15,
-          density: 30000, // One particle every n pixels
-          curvedLines: false,
-          proximity: 20, // How close two dots need to be before they join
-          parallaxMultiplier: 20, // Lower the number is more extreme parallax
-          particleRadius: 2, // Dot size
-          parallax: false,
-        });
-        this.background.pause();
-        this.foreground = window.particleground(document.getElementById('particles-foreground'), {
-          dotColor: 'rgba(255, 255, 255, 1)',
-          lineColor: 'rgba(255, 255, 255, 0.05)',
-          minSpeedX: 0.3,
-          maxSpeedX: 0.6,
-          minSpeedY: 0.3,
-          maxSpeedY: 0.6,
-          density: 50000, // One particle every n pixels
-          curvedLines: false,
-          proximity: 250, // How close two dots need to be before they join
-          parallaxMultiplier: 10, // Lower the number is more extreme parallax
-          particleRadius: 4, // Dot size
-          parallax: false,
-        });
-        this.foreground.pause();
-        window.addEventListener('resize', debounce(this.resizeHandler.bind(this), 250));
+        this.renderCanvas();
+        window.addEventListener('resize', debounce(this.resizeHandler.bind(this), 500));
       }
     }
 
+    renderCanvas () {
+      console.log("render canvas");
+      let d = document.createElement("div");
+      d.style.position = "fixed";
+      d.style.width = "202%";
+      d.style.height = "202%";
+      d.style.visibility = "hidden";
+      d.style.zIndex = "-1000";
+      document.body.appendChild(d);
+
+      const pg = window.particleground(d, {
+        dotColor: 'rgba(255, 255, 255, 1)',
+        lineColor: 'rgba(255, 255, 255, 0.05)',
+        minSpeedX: 0.3,
+        maxSpeedX: 0.6,
+        minSpeedY: 0.3,
+        maxSpeedY: 0.6,
+        density: 50000, // One particle every n pixels
+        curvedLines: false,
+        proximity: 250, // How close two dots need to be before they join
+        parallaxMultiplier: 10, // Lower the number is more extreme parallax
+        particleRadius: 4, // Dot size
+        parallax: false,
+      });
+      pg.pause();
+      document.getElementById("bgimg").style.background = `url(${d.children[0].toDataURL()}) 50% 50%`;
+      pg.destroy();
+    }
+
     resizeHandler() {
+      this.renderCanvas();
       if (this.background) {
         this.background.start();
         this.background.pause();
@@ -93,14 +94,17 @@
     render() {
       return (
         <div className={`ui ${this.props.layout.isSearching ? 'searching' : 'not-searching'} ${this.props.layout.isLoading ? 'loading' : 'not-loading'} ${this.props.layout.isOpen ? 'open' : 'close'}`}>
+          <input id="isOpen" type="checkbox" style={{ display: "none" }} />
           <div id="particles-background" className="vertical-centered-box" />
-          <div id="particles-foreground" className="vertical-centered-box" />
-          <div id="sidebarButton" onClick={() => this.props.toggle_sidebar()}>
-            <span />
-            <span />
-            <span />
-            <span />
+          <div id="particles-foreground" className="vertical-centered-box">
+            <div id="bgimg" />
           </div>
+          <label id="sidebarButton" htmlFor="isOpen">
+            <span />
+            <span />
+            <span />
+            <span />
+          </label>
           <SideBar />
           <div className="content">
             <CSSTransitionGroup
