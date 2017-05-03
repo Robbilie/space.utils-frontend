@@ -24,10 +24,10 @@ class ServerStatus extends React.Component {
   async updateUserCounter() {
     const client = await ESIClient;
     try {
-      const { obj } = await client.Status.get_status();
+      const { body: status } = await client.apis.Status.get_status();
       this.setState({
-        status: !obj.vip,
-        online: obj.players,
+        status: !status.vip,
+        online: status.players,
       });
       this.timeout = setTimeout(() => this.updateUserCounter(), 1000 * 60 * 5);
     } catch (e) {

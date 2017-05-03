@@ -48,14 +48,24 @@
 
     async request_search(search, init) {
       const client = await ESIClient;
-      const { obj: search_data } = await client.apis.Search.get_search({ search, strict: !!init, categories: this.props.categories });
+      const { body: search_data } = await client.apis.Search.get_search({
+        search,
+        strict: !!init,
+        categories: this.props.categories,
+      });
       if ([].concat(...Object.values(search_data)).length == 0) {
         return this.setState({
           results: [['No results', []]],
         });
       }
-      const { obj } = await client.apis.Universe.post_universe_names({ ids: [].concat(...Object.values(search_data).map(val => val.slice(0, this.props.limit))) });
-      const lookup = obj.reduce((p, { id, name }) => !(p[id] = name) || p, {});
+      const { body: names } = await client.apis.Universe.post_universe_names({
+        ids: []
+          .concat(...Object
+            .values(search_data)
+            .map(val => val.slice(0, this.props.limit))
+          ),
+      });
+      const lookup = names.reduce((p, { id, name }) => !(p[id] = name) || p, {});
       const results = Object.entries(search_data).map(([name, ids]) => ([name, ids.slice(0, this.props.limit).map(id => ({ id, name: lookup[id] }))]));
       if (this.props.layout.search == search) {
         console.log(results);

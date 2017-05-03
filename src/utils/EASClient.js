@@ -1,12 +1,17 @@
 
-import SwaggerClient from 'swagger-client';
+import Swagger from 'swagger-client';
 
-const EASClient = new SwaggerClient({
+const UA = typeof process !== 'undefined' && process.env.UA ? process.env.UA : 'https://utils.space/';
+
+const EASClient = new Swagger({
   url: 'https://api.utils.space/api-docs',
-  usePromise: true,
-}).then((client) => {
-  client.clientAuthorizations.add('ua', new SwaggerClient.ApiKeyAuthorization('X-User-Agent', 'https://utils.space/', 'header'));
-  return client;
+  requestInterceptor: (req) => {
+    req.headers['User-Agent'] = UA;
+    if (req.method === 'POST') {
+      req.body = JSON.stringify(req.body);
+    }
+    return req;
+  },
 });
 
 export default EASClient;

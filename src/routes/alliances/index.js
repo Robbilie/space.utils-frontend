@@ -10,8 +10,10 @@
 
     async action({ path, store, params: { id } }) {
       store.dispatch(set_loading(true));
-      let client = await EASClient;
-      let { obj: data } = await client.alliances.AllianceHandler_get_by_id({ alliance_id: parseInt(id) });
+      const client = await EASClient;
+      const { body: data } = await client.apis.alliances.AllianceHandler_get_by_id({
+        alliance_id: parseInt(id, 10),
+      });
       store.dispatch(set_loading(false));
       return {
         title: `Alliance - ${data.name}`,

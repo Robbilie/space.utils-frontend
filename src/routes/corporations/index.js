@@ -10,8 +10,10 @@
 
     async action({ path, store, params: { id } }) {
       store.dispatch(set_loading(true));
-      let client = await EASClient;
-      let { obj: data } = await client.corporations.CorporationHandler_get_by_id({ corporation_id: parseInt(id) });
+      const client = await EASClient;
+      const { body: data } = await client.apis.corporations.CorporationHandler_get_by_id({
+        corporation_id: parseInt(id, 10),
+      });
       store.dispatch(set_loading(false));
       return {
         title: `Corporation - ${data.name}`,

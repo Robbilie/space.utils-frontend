@@ -10,8 +10,10 @@
 
     async action({ path, store, params: { id } }) {
       store.dispatch(set_loading(true));
-      let client = await EASClient;
-      let { obj: data } = await client.characters.CharacterHandler_get_by_id({ character_id: parseInt(id) });
+      const client = await EASClient;
+      const { body: data } = await client.apis.characters.CharacterHandler_get_by_id({
+        character_id: parseInt(id, 10),
+      });
       store.dispatch(set_loading(false));
       return {
         title: `Character - ${data.name}`,
