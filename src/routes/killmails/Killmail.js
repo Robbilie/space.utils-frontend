@@ -129,7 +129,7 @@
                 <div className="tab-kill">
                   {this.props.data.attackers.map((attacker, i) =>
                     <div key={this.props.data.id + "-attacker-" + i}>
-                      <img src={`https://imageserver.eveonline.com/Type/${attacker.ship_type.id}_32.png`} />
+                      <img src={`https://imageserver.eveonline.com/Type/${(attacker.ship_type || { id: 0 }).id}_32.png`} />
                       <img src={`https://imageserver.eveonline.com/Type/${(attacker.weapon_type || attacker.ship_type).id}_32.png`} />
                       <img src={`https://imageserver.eveonline.com/${(["character", "corporation", "alliance"].find(e => !!attacker[e]) || "alliance").capitalizeFirstLetter()}/${[attacker.character, attacker.corporation, attacker.alliance, attacker.faction].find(e => !!e).id}_32.${["character", "corporation", "alliance"].find(e => !!attacker[e]) == "character" ? "jpg" : "png"}`} />
                       <span>{[attacker.character, attacker.corporation, attacker.alliance, attacker.faction].find(e => !!e).name}</span>
