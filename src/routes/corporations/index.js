@@ -11,7 +11,7 @@
     async action({ path, store, params: { id } }) {
       store.dispatch(set_loading(true));
       const client = await EASClient;
-      const { body: data } = await client.apis.corporations.CorporationHandler_get_by_id({
+      const { body: data } = await client.apis.Corporation.get_corporations_corporation_id({
         corporation_id: parseInt(id, 10),
       });
       store.dispatch(set_loading(false));

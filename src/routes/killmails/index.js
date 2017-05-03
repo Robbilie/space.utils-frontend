@@ -12,7 +12,7 @@
     async action({ path, store, params: { id } }) {
       store.dispatch(set_loading(true));
       const client = await EASClient;
-      const { body: data } = await client.apis.killmails.KillmailHandler_get_by_id({
+      const { body: data } = await client.apis.Killmail.get_killmails_killmail_id({
         killmail_id: parseInt(id, 10),
       });
       store.dispatch(set_loading(false));
@@ -31,7 +31,7 @@
       console.log(query);
       store.dispatch(set_loading(true));
       const client = await EASClient;
-      const { body: data } = await client.apis.killmails.KillmailHandler_filter({
+      const { body: data } = await client.apis.Killmail.post_killmails_filter({
         body: {
           filter: Object.assign(
             {},

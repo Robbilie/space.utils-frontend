@@ -11,7 +11,7 @@
     async action({ path, store, params: { id } }) {
       store.dispatch(set_loading(true));
       const client = await EASClient;
-      const { body: data } = await client.apis.characters.CharacterHandler_get_by_id({
+      const { body: data } = await client.apis.Character.get_characters_character_id({
         character_id: parseInt(id, 10),
       });
       store.dispatch(set_loading(false));
