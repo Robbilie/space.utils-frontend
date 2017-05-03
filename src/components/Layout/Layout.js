@@ -1,6 +1,6 @@
 
   import React, { cloneElement } from 'react';
-  import CSSTransitionGroup from 'react-addons-css-transition-group';
+  import CSSTransitionGroup from 'react-transition-group/CSSTransitionGroup';
 
   import withStyles from 'isomorphic-style-loader/lib/withStyles';
   import s from './Layout.css';
