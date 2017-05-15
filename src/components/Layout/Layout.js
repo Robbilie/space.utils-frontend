@@ -62,6 +62,7 @@
       pg.pause();
       document.getElementById("bgimg").style.background = `url(${d.children[0].toDataURL()}) 50% 50%`;
       pg.destroy();
+      document.body.removeChild(d);
     }
 
     resizeHandler() {
