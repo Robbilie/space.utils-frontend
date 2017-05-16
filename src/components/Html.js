@@ -78,9 +78,6 @@ class Html extends React.Component {
             ` }}
           />
           }
-          {analytics.googleTrackingId &&
-          <script src="https://www.google-analytics.com/analytics.js" async defer />
-          }
         </head>
         <body>
           <svg width="0" height="0" viewBox="0 0 1 1">
