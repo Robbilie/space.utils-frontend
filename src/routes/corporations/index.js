@@ -20,7 +20,12 @@
         ogp: {
           title: `Corporation - ${data.name}`,
           description: `Ticker: ${data.ticker}${data.alliance_id ? ` | Alliance: ${data.alliance.name}` : ''}`,
-          image: `https://imageserver.eveonline.com/Character/${data.id}_256.jpg`,
+          image: `https://imageserver.eveonline.com/Corporation/${data.id}_256.png`,
+        },
+        jsonld: {
+          '@type': 'Organization',
+          name: data.name,
+          logo: `https://imageserver.eveonline.com/Corporation/${data.id}_256.png`,
         },
         component: <Corporation data={data} />,
         location: { path },

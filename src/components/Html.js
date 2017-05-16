@@ -33,7 +33,7 @@ class Html extends React.Component {
   };
 
   render() {
-    const { title, description, ogp, styles, scripts, state, children, location } = this.props;
+    const { title, description, ogp, jsonld, styles, scripts, state, children, location } = this.props;
     return (
       <html prefix="og: http://ogp.me/ns#" className="no-js" lang="en">
         <head>
@@ -45,6 +45,7 @@ class Html extends React.Component {
           <meta property="og:type" content="website" />
           <meta property="og:url" content={`https://utils.space${location.path}`} />
           {ogp ? Object.entries(ogp).map(([key, value]) => <meta key={`og:${key}`} property={`og:${key}`} content={`${value}`} />) : null}
+          {jsonld ? <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(Object.assign({ '@context': 'http://schema.org' }, jsonld, { url: `https://utils.space${location.path}` }), null, 2) }} /> : null}
           <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0" />
           <link rel="search" type="application/opensearchdescription+xml" href="/xml/search.xml" title="search" />
           <link rel="apple-touch-icon" href="apple-touch-icon.png" />

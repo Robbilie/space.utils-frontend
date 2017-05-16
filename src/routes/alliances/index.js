@@ -22,6 +22,11 @@
           description: `Ticker: ${data.ticker}${data.executor_corporation_id ? ` | Executor: ${data.executor_corporation.name}` : ''}`,
           image: `https://imageserver.eveonline.com/Alliance/${data.id}_128.png`,
         },
+        jsonld: {
+          '@type': 'Organization',
+          name: data.name,
+          logo: `https://imageserver.eveonline.com/Alliance/${data.id}_128.png`,
+        },
         component: <Alliance data={data} />,
         location: { path },
       };
