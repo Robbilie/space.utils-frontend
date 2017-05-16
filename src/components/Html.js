@@ -64,6 +64,17 @@ class Html extends React.Component {
               dangerouslySetInnerHTML={{ __html: style.cssText }}
             />,
           )}
+          {analytics.googleTrackingId &&
+          <script
+            // eslint-disable-next-line react/no-danger
+            dangerouslySetInnerHTML={{ __html:
+            'window.ga=function(){ga.q.push(arguments)};ga.q=[];ga.l=+new Date;' +
+            `ga('create','${analytics.googleTrackingId}','auto');ga('send','pageview')` }}
+          />
+          }
+          {analytics.googleTrackingId &&
+          <script src="https://www.google-analytics.com/analytics.js" async defer />
+          }
         </head>
         <body>
           <svg width="0" height="0" viewBox="0 0 1 1">
@@ -95,17 +106,6 @@ class Html extends React.Component {
             />
           )}
           {scripts.map(script => <script key={script} src={script} />)}
-          {analytics.googleTrackingId &&
-            <script
-              // eslint-disable-next-line react/no-danger
-              dangerouslySetInnerHTML={{ __html:
-              'window.ga=function(){ga.q.push(arguments)};ga.q=[];ga.l=+new Date;' +
-              `ga('create','${analytics.googleTrackingId}','auto');ga('send','pageview')` }}
-            />
-          }
-          {analytics.googleTrackingId &&
-            <script src="https://www.google-analytics.com/analytics.js" async defer />
-          }
         </body>
       </html>
     );
