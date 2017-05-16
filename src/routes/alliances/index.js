@@ -17,6 +17,10 @@
       store.dispatch(set_loading(false));
       return {
         title: `Alliance - ${data.name}`,
+        ogp: {
+          title: `Alliance - ${data.name}`,
+          image: `https://imageserver.eveonline.com/Alliance/${data.id}_128.png`,
+        },
         component: <Alliance data={data} />,
         location: { path },
       };

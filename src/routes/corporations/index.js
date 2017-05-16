@@ -17,6 +17,10 @@
       store.dispatch(set_loading(false));
       return {
         title: `Corporation - ${data.name}`,
+        ogp: {
+          title: `Corporation - ${data.name}`,
+          image: `https://imageserver.eveonline.com/Character/${data.id}_256.jpg`,
+        },
         component: <Corporation data={data} />,
         location: { path },
       };
