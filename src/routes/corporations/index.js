@@ -19,6 +19,7 @@
         title: `Corporation - ${data.name}`,
         ogp: {
           title: `Corporation - ${data.name}`,
+          description: `Ticker: ${data.ticker}${data.alliance_id ? ` | Alliance: ${data.alliance.name}` : ''}`,
           image: `https://imageserver.eveonline.com/Character/${data.id}_256.jpg`,
         },
         component: <Corporation data={data} />,
