@@ -1,6 +1,7 @@
 
   import React from 'react';
   import Link from '../../components/Link';
+  import Tabs from '../../components/Tabs';
 
   class Character extends React.Component {
 
@@ -50,6 +51,11 @@
               <br	/>
               <b>{this.props.data.name}</b>
             </h2>
+            <Tabs id={this.props.data.id}>
+              <div title="One"><div className="tab-box"></div></div>
+              <div title="Two"><div className="tab-box"></div></div>
+              <div title="Three"><div className="tab-box"></div></div>
+            </Tabs>
           </div>
         </div>
       );
