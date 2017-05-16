@@ -43,7 +43,7 @@ class Html extends React.Component {
           <title>{title}</title>
           <meta name="description" content={description} />
           <meta property="og:type" content="website" />
-          <meta property="og:url" content={`https://utils.space${location.path}`} />
+          {location ? <meta property="og:url" content={`https://utils.space${location.path}`} /> : null}
           {ogp ? Object.entries(ogp).map(([key, value]) => <meta key={`og:${key}`} property={`og:${key}`} content={`${value}`} />) : null}
           {jsonld ? <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(Object.assign({ '@context': 'http://schema.org' }, jsonld, { url: `https://utils.space${location.path}` }), null, 2) }} /> : null}
           <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0" />

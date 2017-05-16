@@ -6,10 +6,7 @@ const UA = typeof process !== 'undefined' && process.env.UA ? process.env.UA : '
 const EASClient = new Swagger({
   url: 'https://api.utils.space/api-docs',
   requestInterceptor: (req) => {
-    req.headers['User-Agent'] = UA;
-    if (req.method === 'POST') {
-      req.body = JSON.stringify(req.body);
-    }
+    req.headers['X-User-Agent'] = UA;
     return req;
   },
 });
