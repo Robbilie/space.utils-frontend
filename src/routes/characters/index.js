@@ -20,12 +20,12 @@
         ogp: {
           title: `Character - ${data.name}`,
           description: `Corporation: ${data.corporation.name}${data.alliance_id ? ` | Alliance: ${data.alliance.name}` : ''}`,
-          image: `https://imageserver.eveonline.com/Character/${data.id}_256.jpg`,
+          image: `https://imageserver.eveonline.com/Character/${data.id}_128.jpg`,
         },
         jsonld: {
           '@type': 'Person',
           name: data.name,
-          image: `https://imageserver.eveonline.com/Character/${data.id}_256.jpg`,
+          image: `https://imageserver.eveonline.com/Character/${data.id}_128.jpg`,
         },
         component: <Character data={data} />,
         location: { path },
