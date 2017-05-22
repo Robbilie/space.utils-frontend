@@ -7,9 +7,6 @@ const EASClient = new Swagger({
   url: 'https://api.utils.space/api-docs',
   requestInterceptor: (req) => {
     req.headers['X-User-Agent'] = UA;
-    if (req.method === 'POST' && !["String", "Number"].includes(req.body.constructor.name)) {
-      req.body = JSON.stringify(req.body);
-    }
     return req;
   },
 });
