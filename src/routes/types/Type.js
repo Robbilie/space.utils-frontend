@@ -5,24 +5,15 @@
 
   class Type extends React.Component {
 
-    constructor(props) {
-      super(props);
-      this.state = {
-        id: 0,
-        name: '',
-        description: '',
-      };
-    }
-
     render() {
       return (
-        <div className="page alliance-page two-col-page">
+        <div className="page type-page two-col-page">
           <div className="left-col">
-            <img style={{ width: '256px' }} src={`https://imageserver.eveonline.com/Type/${this.state.id}_64.png`} />
+            <img style={{ width: '256px' }} src={`https://imageserver.eveonline.com/Type/${this.props.data.id}_64.png`} />
             <h2 className="mobile">
               <span>Type</span>
               <br />
-              <b>{this.state.name}</b>
+              <b>{this.props.data.name}</b>
             </h2>
             <div className="info-list">
 
@@ -32,7 +23,7 @@
             <h2 className="desktop">
               <span>Type</span>
               <br />
-              <b>{this.state.name}</b>
+              <b>{this.props.data.name}</b>
             </h2>
             <Tabs id={this.props.data.id}>
               <div title="One"><div className="tab-box"></div></div>
