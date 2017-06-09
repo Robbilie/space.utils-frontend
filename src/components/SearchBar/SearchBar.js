@@ -40,7 +40,7 @@
 
     search(search, init) {
       console.log(search, init);
-      if (!init) { /*this.setState({ query: search });*/ }
+      if (!init) { /* this.setState({ query: search }); */ }
       if (search.length < 3) { return this.setState({ results: [['Start typing…', []]] }); }
       console.log("searching for", search);
       this.debounce_request_search(search, init);
@@ -53,7 +53,7 @@
         strict: !!init,
         categories: this.props.categories,
       });
-      if ([].concat(...Object.values(search_data)).length == 0) {
+      if ([].concat(...Object.values(search_data)).length === 0) {
         return this.setState({
           results: [['No results', []]],
         });
@@ -66,15 +66,19 @@
           ),
       });
       const lookup = names.reduce((p, { id, name }) => !(p[id] = name) || p, {});
-      const results = Object.entries(search_data).map(([name, ids]) => ([name, ids.slice(0, this.props.limit).map(id => ({ id, name: lookup[id] }))]));
-      if (this.props.layout.search == search) {
+      const results = Object
+        .entries(search_data)
+        .map(([name, ids]) =>
+          ([name, ids.slice(0, this.props.limit)
+            .map(id => ({ id, name: lookup[id] }))]));
+      if (this.props.layout.search === search) {
         console.log(results);
         this.setState({ results });
       }
     }
 
     resultToUrl(size, category, id) {
-      return `https://imageserver.eveonline.com/${category.split('_').slice(-1)[0].capitalizeFirstLetter()}/${id}_${size}.${category == 'character' ? 'jpg' : 'png'}`;
+      return `https://imageserver.eveonline.com/${category.split('_').slice(-1)[0].replace('inventory', '').capitalizeFirstLetter()}/${id}_${size}.${category === 'character' ? 'jpg' : 'png'}`;
     }
 
     render() {
@@ -101,7 +105,7 @@
               value={this.props.layout.search}
               onChange={e => console.log('onchange') || this.props.set_search(e.target.value)}
               onKeyUp={e => console.log('onkeyup') || !this.props.set_searching(!!e.target.value) || this.search(e.target.value)}
-              onFocus={e => console.log('onfocus') || !this.props.set_searching(!!e.target.value) || e.target.value == '' ? this.setState({ results: [['Start typing…', []]] }) : false}
+              onFocus={e => console.log('onfocus') || !this.props.set_searching(!!e.target.value) || e.target.value === '' ? this.setState({ results: [['Start typing…', []]] }) : false}
             />
           </div>
         </div>
