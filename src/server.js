@@ -10,6 +10,7 @@ import App from './components/App';
 import Html from './components/Html';
 import { ErrorPageWithoutStyle } from './routes/error/ErrorPage';
 import errorPageStyle from './routes/error/ErrorPage.css';
+import createFetch from './createFetch';
 import router from './router';
 import assets from './assets.json'; // eslint-disable-line import/no-unresolved
 import configureStore from './store/configureStore';
@@ -44,18 +45,26 @@ app.get('/sw.js', (req, res) => res.sendFile(path.join(__dirname, 'public', 'ass
 // -----------------------------------------------------------------------------
 app.get('*', async (req, res, next) => {
   try {
-    const store = configureStore({
-      user: req.user || null,
-    }, {
+    const css = new Set();
+
+    const fetch = createFetch({
+      baseUrl: config.api.serverUrl,
       cookie: req.headers.cookie,
+    });
+
+    const initialState = {
+      user: req.user || null,
+    };
+
+    const store = configureStore(initialState, {
+      fetch,
+      // I should not use `history` on server.. but how I do redirection? follow universal-router
     });
 
     store.dispatch(setRuntimeVariable({
       name: 'initialNow',
       value: Date.now(),
     }));
-
-    const css = new Set();
 
     // Global (context) variables that can be easily accessed from any React component
     // https://facebook.github.io/react/docs/context.html
@@ -66,9 +75,10 @@ app.get('*', async (req, res, next) => {
         // eslint-disable-next-line no-underscore-dangle
         styles.forEach(style => css.add(style._getCss()));
       },
-      // Initialize a new Redux store
-      // http://redux.js.org/docs/basics/UsageWithReact.html
+      fetch,
+      // You can access redux through react-redux connect
       store,
+      storeSubscription: null,
     };
 
     const route = await router.resolve({
@@ -83,7 +93,11 @@ app.get('*', async (req, res, next) => {
     }
 
     const data = { ...route };
-    data.children = ReactDOM.renderToString(<App context={context}>{route.component}</App>);
+    data.children = ReactDOM.renderToString(
+      <App context={context} store={store}>
+        {route.component}
+      </App>,
+    );
     data.styles = [
       { id: 'css', cssText: [...css].join('') },
     ];
@@ -91,12 +105,12 @@ app.get('*', async (req, res, next) => {
       assets.vendor.js,
       assets.client.js,
     ];
-    data.state = context.store.getState();
     if (assets[route.chunk]) {
       data.scripts.push(assets[route.chunk].js);
     }
     data.app = {
       apiUrl: config.api.clientUrl,
+      state: context.store.getState(),
     };
 
     const html = ReactDOM.renderToStaticMarkup(<Html {...data} />);

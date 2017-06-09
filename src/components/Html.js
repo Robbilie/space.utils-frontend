@@ -29,11 +29,10 @@ class Html extends React.Component {
   static defaultProps = {
     styles: [],
     scripts: [],
-    state: null,
   };
 
   render() {
-    const { title, description, ogp, jsonld, styles, scripts, state, children, location } = this.props;
+    const { title, description, ogp, jsonld, styles, scripts, app, children, location } = this.props;
     return (
       <html prefix="og: http://ogp.me/ns#" className="no-js" lang="en">
         <head>
@@ -96,18 +95,8 @@ class Html extends React.Component {
               </clipPath>
             </defs>
           </svg>
-          <div
-            id="app"
-            // eslint-disable-next-line react/no-danger
-            dangerouslySetInnerHTML={{ __html: children }}
-          />
-          {state && (
-            <script
-              // eslint-disable-next-line react/no-danger
-              dangerouslySetInnerHTML={{ __html:
-              `window.APP_STATE=${serialize(state, { isJSON: true })}` }}
-            />
-          )}
+          <div id="app" dangerouslySetInnerHTML={{ __html: children }} />
+          <script dangerouslySetInnerHTML={{ __html: `window.App=${serialize(app)}` }} />
           {scripts.map(script => <script key={script} src={script} />)}
         </body>
       </html>

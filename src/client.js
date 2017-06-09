@@ -9,12 +9,15 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom';
+import ErrorReporter from 'redbox-react';
+import deepForceUpdate from 'react-deep-force-update';
 import FastClick from 'fastclick';
 import queryString from 'query-string';
 import { createPath } from 'history/PathUtils';
-import history from './history';
 import App from './components/App';
+import createFetch from './createFetch';
 import configureStore from './store/configureStore';
+import history from './history';
 import { updateMeta } from './DOMUtils';
 import { ErrorReporter, deepForceUpdate } from './devUtils';
 
@@ -42,9 +45,14 @@ const context = {
     const removeCss = styles.map(x => x._insertCss());
     return () => { removeCss.forEach(f => f()); };
   },
+  // Universal HTTP client
+  fetch: createFetch({
+    baseUrl: window.App.apiUrl,
+  }),
   // Initialize a new Redux store
   // http://redux.js.org/docs/basics/UsageWithReact.html
-  store: configureStore(window.APP_STATE, { history }),
+  store: configureStore(window.App.state, { history }),
+  storeSubscription: null,
 };
 
 // Switch off the native scroll restoration behavior and handle it manually
