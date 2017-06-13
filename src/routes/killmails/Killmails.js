@@ -36,7 +36,7 @@
             <span>
               <b>{[victim.character, victim.corporation, victim.alliance, victim.faction].find(e => !!e).name}</b>
               <br />
-              {[victim.corporation.name, victim.alliance ? victim.alliance.name : null].filter(e => !!e).join(" | ")}
+              {[victim.alliance ? `[${victim.corporation.ticker}]` : victim.corporation.name, victim.alliance ? victim.alliance.name : null].filter(e => !!e).join(" | ")}
             </span>
           </div>
           <div className="column grad col-3 deso">
@@ -44,7 +44,7 @@
             <span>
               <b>{[attacker.character, attacker.corporation, attacker.alliance, attacker.faction].find(e => !!e).name + (killmail.attackers.length > 1 ? " [+" + (killmail.attackers.length - 1) + "]" : "")}</b>
               <br />
-              {[attacker.corporation ? attacker.corporation.name : null, attacker.alliance ? attacker.alliance.name : null, attacker.faction && !attacker.character ? attacker.faction.name : null].filter(e => !!e).join(" | ")}
+              {[attacker.corporation ? (attacker.alliance ? `[${attacker.corporation.ticker}]` : attacker.corporation.name) : null, attacker.alliance ? attacker.alliance.name : null, attacker.faction && !attacker.character ? attacker.faction.name : null].filter(e => !!e).join(" | ")}
             </span>
           </div>
         </Link>
