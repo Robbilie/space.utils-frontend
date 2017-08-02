@@ -3,19 +3,20 @@ FROM node:alpine
 # clone repo
 RUN mkdir -p /usr/src/repo
 WORKDIR /usr/src/repo
-COPY . .
+
+COPY package.json /usr/src/repo/
 
 # Install Node.js dependencies
 RUN yarn install --no-progress
+
+COPY . .
 
 # build
 RUN NODE_ENV=production yarn run build -- --release
 
 # create actual dir
-RUN mkdir -p /usr/src/app
-
-# copy built files
-COPY ./build ../app
+RUN mv -f /usr/src/repo/build /usr/src/app
+RUN rm -rf /usr/src/repo
 WORKDIR /usr/src/app
 
 # Install Node.js dependencies
