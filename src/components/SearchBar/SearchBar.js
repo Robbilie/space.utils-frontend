@@ -78,7 +78,7 @@
     }
 
     resultToUrl(size, category, id) {
-      return `https://imageserver.eveonline.com/${category.split('_').slice(-1)[0].replace('inventory', '').capitalizeFirstLetter()}/${id}_${size}.${category === 'character' ? 'jpg' : 'png'}`;
+      return `https://imageserver.eveonline.com/${category.split('_').slice(-1)[0].capitalizeFirstLetter()}/${id}_${size}.${category === 'character' ? 'jpg' : 'png'}`;
     }
 
     render() {
@@ -91,7 +91,7 @@
                 [
                   <h3	key={result[0]}>{result[0]}</h3>,
                   result[1].map(({ id, name }) =>
-                    <Link key={id} to={`/${result[0].split("_").slice(-1)[0].replace('inventory', '')}s/${id}/`} onClick={e => { this.props.set_search(""); this.props.set_searching(false); } }>
+                    <Link key={id} to={`/${result[0].split("_").slice(-1)[0]}s/${id}/`} onClick={e => { this.props.set_search(""); this.props.set_searching(false); } }>
                       <img src={this.resultToUrl(64, result[0], id) } />
                       <span>{name}</span>
                     </Link>,

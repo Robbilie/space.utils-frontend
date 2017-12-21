@@ -122,7 +122,7 @@
             </CSSTransitionGroup>
           </div>
           <div className="topbar">
-            <SearchBar limit={20} categories={['alliance', 'character', 'corporation', 'inventorytype', 'solarsystem', 'faction']} />
+            <SearchBar limit={20} categories={['alliance', 'character', 'corporation', 'inventory_type', 'solar_system', 'faction']} />
             <Clock />
           </div>
           { this.props.layout.isLoading ? <Loading /> : null }
